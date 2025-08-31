@@ -14,16 +14,281 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      draft_events: {
+        Row: {
+          confidence: number | null
+          created_at: string
+          end_dt: string | null
+          id: string
+          location: string | null
+          needs_confirmation: boolean | null
+          notes: string | null
+          ocr_text: string | null
+          source_message_id: string
+          start_dt: string | null
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          confidence?: number | null
+          created_at?: string
+          end_dt?: string | null
+          id?: string
+          location?: string | null
+          needs_confirmation?: boolean | null
+          notes?: string | null
+          ocr_text?: string | null
+          source_message_id: string
+          start_dt?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          confidence?: number | null
+          created_at?: string
+          end_dt?: string | null
+          id?: string
+          location?: string | null
+          needs_confirmation?: boolean | null
+          notes?: string | null
+          ocr_text?: string | null
+          source_message_id?: string
+          start_dt?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draft_events_source_message_id_fkey"
+            columns: ["source_message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "draft_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          calendar_id: string | null
+          created_at: string
+          draft_event_id: string | null
+          google_event_id: string
+          id: string
+          request_payload: Json | null
+          response_payload: Json | null
+          user_id: string
+        }
+        Insert: {
+          calendar_id?: string | null
+          created_at?: string
+          draft_event_id?: string | null
+          google_event_id: string
+          id?: string
+          request_payload?: Json | null
+          response_payload?: Json | null
+          user_id: string
+        }
+        Update: {
+          calendar_id?: string | null
+          created_at?: string
+          draft_event_id?: string | null
+          google_event_id?: string
+          id?: string
+          request_payload?: Json | null
+          response_payload?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_draft_event_id_fkey"
+            columns: ["draft_event_id"]
+            isOneToOne: false
+            referencedRelation: "draft_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          created_at: string
+          id: string
+          media_url: string | null
+          platform_msg_id: string
+          processed: boolean | null
+          raw_json: Json | null
+          received_at: string
+          text: string | null
+          type: Database["public"]["Enums"]["message_type"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          media_url?: string | null
+          platform_msg_id: string
+          processed?: boolean | null
+          raw_json?: Json | null
+          received_at?: string
+          text?: string | null
+          type: Database["public"]["Enums"]["message_type"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          media_url?: string | null
+          platform_msg_id?: string
+          processed?: boolean | null
+          raw_json?: Json | null
+          received_at?: string
+          text?: string | null
+          type?: Database["public"]["Enums"]["message_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          auth_user_id: string | null
+          created_at: string
+          first_seen: string
+          google_access_token: string | null
+          google_refresh_token: string | null
+          google_sub: string | null
+          id: string
+          ig_psid: string | null
+          ig_username: string | null
+          last_seen: string
+          timezone: string | null
+          updated_at: string
+        }
+        Insert: {
+          auth_user_id?: string | null
+          created_at?: string
+          first_seen?: string
+          google_access_token?: string | null
+          google_refresh_token?: string | null
+          google_sub?: string | null
+          id?: string
+          ig_psid?: string | null
+          ig_username?: string | null
+          last_seen?: string
+          timezone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          auth_user_id?: string | null
+          created_at?: string
+          first_seen?: string
+          google_access_token?: string | null
+          google_refresh_token?: string | null
+          google_sub?: string | null
+          id?: string
+          ig_psid?: string | null
+          ig_username?: string | null
+          last_seen?: string
+          timezone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      webhook_logs: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          event_type: string | null
+          id: string
+          payload: Json | null
+          processed: boolean | null
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          event_type?: string | null
+          id?: string
+          payload?: Json | null
+          processed?: boolean | null
+          source: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          event_type?: string | null
+          id?: string
+          payload?: Json | null
+          processed?: boolean | null
+          source?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      message_type: "text" | "image" | "share_preview" | "link"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +415,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      message_type: ["text", "image", "share_preview", "link"],
+    },
   },
 } as const
