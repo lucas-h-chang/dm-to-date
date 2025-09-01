@@ -132,14 +132,25 @@ export default function Dashboard() {
     if (!profile) return
 
     try {
-      const { data, error } = await supabase.functions.invoke('google-auth/auth', {
-        body: { user_id: profile.id }
-      })
+      // Build the function name with the user ID in the URL
+      const functionName = `google-auth/auth?user_id=${encodeURIComponent(profile.id)}`;
+
+      // Invoke the function using the GET method
+      const { data, error } = await supabase.functions.invoke(functionName, { method: 'GET' });
+
 
       if (error) throw error
 
-      // Open Google OAuth in a popup
-      window.open(data.authUrl, 'google-auth', 'width=600,height=600')
+      // Immediately open a blank pop‑up so the browser trusts it.
+      const popup = window.open('', 'google-auth', 'width=600,height=600');
+
+      if (popup) {
+      // After we get the auth URL from the server, redirect the pop‑up to that URL.
+      popup.location.href = data.authUrl;
+    } else {
+      // If the browser won’t open a pop‑up, redirect the whole window as a fallback.
+      window.location.href = data.authUrl;
+    }
       
       toast({
         title: 'Opening Google Authentication',
